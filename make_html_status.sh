@@ -87,8 +87,7 @@ ${INPUT_FILES}<br>
 OUTPUT:<br>
 ${OUTPUT_FILES}<br>
 PROCESSES:<br>
-${RUNNING_BLURAY}<br>
-${RUNNING_UHD}<br>
+${RUNNING}<br>
 --------------------------------------------------------------------<br>
 ${CURR_HTML}
 EOT
