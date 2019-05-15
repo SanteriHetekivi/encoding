@@ -24,7 +24,14 @@ find "$INPUT_DIR" -name "*.mkv" -type f | while read filePath; do
     donePath="$DONE_DIR$filename" &&
     outputPath="$OUTPUT_DIR$filename" &&
     # Run HandBreak command.
-    flatpak run --command=HandBrakeCLI fr.handbrake.ghb --preset-import-file "$presetPath" -i "$filePath" -o "$outputPath" 2>&1 | tee "$logPath" &&
+    set -o pipefail &&
+    flatpak run --command=HandBrakeCLI fr.handbrake.ghb --preset-import-file "$presetPath" -i "$filePath" -o "$outputPath" 2>&1 | tee "$logPath"
+    if [ $? -ne 0 ]; then
+        set +o pipefail
+        echo "Encoding failed!";
+        exit;
+    fi
+    set +o pipefail &&
     # Move finnished file to output dir.
     mv "$filePath" "$donePath" &&
     # Remove log file.
