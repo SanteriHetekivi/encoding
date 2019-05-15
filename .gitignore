@@ -1,0 +1,10 @@
+/www/status.html
+/done
+/output
+/log
+/input/*
+!/input/uhd/
+/input/uhd/*
+!/input/bluray/
+/input/bluray/*
+!preset.json
