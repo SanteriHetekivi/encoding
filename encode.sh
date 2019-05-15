@@ -23,11 +23,6 @@ find "$INPUT_DIR" -name "*.mkv" -type f | while read filePath; do
     logPath="$LOG_DIR$filename.log" &&
     donePath="$DONE_DIR$filename" &&
     outputPath="$OUTPUT_DIR$filename" &&
-    echo $presetPath &&
-    echo $filePath &&
-    echo $logPath &&
-    echo $donePath &&
-    echo $outputPath &&
     # Run HandBreak command.
     flatpak run --command=HandBrakeCLI fr.handbrake.ghb --preset-import-file "$presetPath" -i "$filePath" -o "$outputPath" 2>&1 | tee "$logPath" &&
     # Move finnished file to output dir.
