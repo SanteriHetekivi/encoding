@@ -14,8 +14,14 @@ mkdir -p $DONE_DIR &&
 mkdir -p $LOG_DIR &&
 # Initialize file counter.
 counter=0 &&
+echo "Starting..."
 # Loop through all .mkv files inside input directory recurcively. 
-find "$INPUT_DIR" -name "*.mkv" -type f | while read filePath; do
+while read filePath; do
+    # If empty then just continue.
+    if [ -z "$filePath" ]
+    then
+       continue
+    fi
     # Make all the paths for file.
     dir=$(dirname -- "$filePath") &&
     filename=$(basename -- "$filePath") &&
@@ -25,12 +31,14 @@ find "$INPUT_DIR" -name "*.mkv" -type f | while read filePath; do
     outputPath="$OUTPUT_DIR$filename" &&
     # Run HandBreak command.
     set -o pipefail &&
+    echo "\tEncoding $filename..." &&
     flatpak run --command=HandBrakeCLI fr.handbrake.ghb --preset-import-file "$presetPath" -i "$filePath" -o "$outputPath" 2>&1 | tee "$logPath"
     if [ $? -ne 0 ]; then
         set +o pipefail
-        echo "Encoding failed!";
+        echo "\tEncoding failed!";
         exit;
     fi
+    echo "\tCleaning..." &&
     set +o pipefail &&
     # Move finnished file to output dir.
     mv "$filePath" "$donePath" &&
@@ -38,12 +46,15 @@ find "$INPUT_DIR" -name "*.mkv" -type f | while read filePath; do
     rm -f "$logPath" &&
     # Increment the counter.
     ((counter++))
-done
+done <<< `find "$INPUT_DIR" -name "*.mkv" -type f` 
 # If there where some files then try to run again, because there may be new files.
 if [ $counter -gt 0 ]
 then
-    exit `./encode.sh`
+    echo "Re-scanning..." &&
+    ./encode.sh &&
+    exit 0
 # If there were no files just exit.
 else
+    echo "All done!" &&
     exit 0
 fi
