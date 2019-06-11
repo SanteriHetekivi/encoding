@@ -35,8 +35,16 @@ ls_output_to_html () {
             # Only if there is a log file.
             log_path="./log/$filename.log"
             if [ -f "$log_path" ]; then
-                # Append last log row to HTML.
+                # Get last row of the log file.
                 last_row=`cat "$log_path" | tr '\r' '\n' | tail -n1`
+                # Parses done time from last log row.
+                done_time=`echo "$last_row" | python ./add_to_time.py`
+                # And if it can be parsed add it to new line.
+                if [ ! -z "$done_time" ]
+                then
+                    last_row="$last_row<br>$tab$tab => $done_time"
+                fi
+                # Append last row to HTML as a new line.
                 html="$html<br>$tab$tab$last_row"
             fi
         fi
