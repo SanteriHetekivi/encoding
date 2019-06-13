@@ -16,7 +16,8 @@ mkdir -p $LOG_DIR &&
 counter=0 &&
 echo "Starting..."
 # Loop through all .mkv files inside input directory recurcively. 
-while read filePath; do
+shopt -s globstar
+for filePath in $INPUT_DIR**/*.mkv; do # Whitespace-safe and recursive
     # If empty then just continue.
     if [ -z "$filePath" ]
     then
@@ -46,7 +47,7 @@ while read filePath; do
     rm -f "$logPath" &&
     # Increment the counter.
     ((counter++))
-done <<< `find "$INPUT_DIR" -name "*.mkv" -type f` 
+done 
 # If there where some files then try to run again, because there may be new files.
 if [ $counter -gt 0 ]
 then
