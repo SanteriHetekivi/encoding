@@ -38,7 +38,7 @@ ls_output_to_html () {
                 # Get last row of the log file.
                 last_row=`cat "$log_path" | tr '\r' '\n' | tail -n1`
                 # Parses done time from last log row.
-                done_time=`echo "$last_row" | python ./add_to_time.py`
+                done_time=`echo "$last_row" | python3 ./add_to_time.py`
                 # And if it can be parsed add it to new line.
                 if [ ! -z "$done_time" ]
                 then
@@ -56,12 +56,13 @@ ls_output_to_html () {
 # Outputing proccess statuses as a HTML.
 running_html () {
     pid=`pgrep $1 | tail -1`
+    POST_CALL='var xhr = new XMLHttpRequest();xhr.open("POST", "", true);xhr.send();location.reload();'
     if [[ $pid -gt 0 ]]
     then
         time=`ps -p $pid -o etime=`
-        html="$3<span style='background-color: green' >$2 ($time)</span>"
+        html="$3<span onclick='$POST_CALL' style='background-color: green' >$2 ($time)</span>"
     else
-        html="$3<span style='background-color: red' >$2</span>"
+        html="$3<span onclick='$POST_CALL' style='background-color: red' >$2</span>"
     fi
     echo "$html"
 }

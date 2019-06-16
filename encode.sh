@@ -33,7 +33,7 @@ for filePath in $INPUT_DIR**/*.mkv; do # Whitespace-safe and recursive
     # Run HandBreak command.
     set -o pipefail &&
     echo "\tEncoding $filename..." &&
-    flatpak run --command=HandBrakeCLI fr.handbrake.ghb --preset-import-file "$presetPath" -i "$filePath" -o "$outputPath" 2>&1 | tee "$logPath"
+    HandBrakeCLI --preset-import-file "$presetPath" -i "$filePath" -o "$outputPath" 2>&1 | tee "$logPath"
     if [ $? -ne 0 ]; then
         set +o pipefail
         echo "\tEncoding failed!";

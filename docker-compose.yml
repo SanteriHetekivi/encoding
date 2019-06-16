@@ -1,0 +1,10 @@
+version: "3"
+services:
+  encoding:
+    build: .
+    volumes:
+      - ./input:/app/input
+      - ./output:/app/output
+      - ./done:/app/done
+    ports:
+      - "8080:80"
