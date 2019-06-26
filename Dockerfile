@@ -6,7 +6,8 @@ RUN apk update \
     && apk add --no-cache handbrake \
     && apk add --no-cache python3 \
     && apk add --no-cache bash \
-    && apk add --no-cache procps
+    && apk add --no-cache procps \
+    && apk add --no-cache tzdata
 
 COPY . /app
 
