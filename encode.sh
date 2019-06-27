@@ -30,16 +30,21 @@ for filePath in $INPUT_DIR**/*.mkv; do # Whitespace-safe and recursive
     logPath="$LOG_DIR$filename.log" &&
     donePath="$DONE_DIR$filename" &&
     outputPath="$OUTPUT_DIR$filename" &&
+    if [ -r "$outputPath" ]
+    then
+        echo "Already file at '$outputPath'!";
+        exit;
+    fi
     # Run HandBreak command.
     set -o pipefail &&
-    echo "\tEncoding $filename..." &&
+    echo "Encoding $filename..." &&
     HandBrakeCLI --preset-import-file "$presetPath" -i "$filePath" -o "$outputPath" 2>&1 | tee "$logPath"
     if [ $? -ne 0 ]; then
         set +o pipefail
-        echo "\tEncoding failed!";
+        echo "Encoding failed!";
         exit;
     fi
-    echo "\tCleaning..." &&
+    echo "Cleaning..." &&
     set +o pipefail &&
     # Move finnished file to output dir.
     mv "$filePath" "$donePath" &&
