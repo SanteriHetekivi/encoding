@@ -15,7 +15,7 @@ COPY . /app
 
 RUN addgroup --gid 911 app \
     && mkdir -p /usr/src/app \
-    && adduser -u 911 -G app -h /usr/src/app -S app
+    && adduser -u 911 -G app -h /usr/src/app -s /bin/bash -S app
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
